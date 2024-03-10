@@ -1,24 +1,27 @@
 import {render} from '../render.js';
-import EventEditView from '../view/event-edit-view.js';
-import EventView from '../view/event-view.js';
+import {generatePoint} from '../mock/point.js';
+import PointEditView from '../view/point-edit-view.js';
+import PointView from '../view/point-view.js';
 import SortView from '../view/sort-view.js';
-import TripEventsView from '../view/trip-events-view.js';
+import TripPointsView from '../view/trip-points-view.js';
 
 export default class Presenter {
-  EVENT_COUNT = 3;
-  tripEventsComponent = new TripEventsView();
+  tripPointsComponent = new TripPointsView();
 
-  constructor({container}) {
+  constructor({container, pointsModel}) {
     this.container = container;
+    this.pointsModel = pointsModel;
   }
 
   init() {
+    this.points = [...this.pointsModel.getPoints()];
     render(new SortView(), this.container);
-    render(this.tripEventsComponent, this.container);
-    render(new EventEditView(), this.tripEventsComponent.getElement());
+    render(this.tripPointsComponent, this.container);
+    render(new PointEditView(generatePoint()), this.tripPointsComponent.getElement());
 
-    for (let i = 0; i < this.EVENT_COUNT; i++) {
-      render(new EventView(), this.tripEventsComponent.getElement());
-    }
+    this.points.forEach((point) => {
+      const newPoint = new PointView(point);
+      render(newPoint, this.eventListComponent.getElement());
+    });
   }
 }
