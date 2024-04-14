@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const getOfferTemplate = (offer) => `<div class="event__available-offers">
 <div class="event__offer-selector">
@@ -10,7 +10,7 @@ const getOfferTemplate = (offer) => `<div class="event__available-offers">
   </label>
 </div>`;
 
-const getEditPointTemplate = (point) => `<li class="trip-events__item">
+const getPointEditTemplate = (point) => `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
@@ -120,23 +120,24 @@ const getEditPointTemplate = (point) => `<li class="trip-events__item">
               </form>
             </li>`;
 
-export default class PointEditView {
-  constructor(point) {
-    this.point = point;
+export default class PointEditView extends AbstractView {
+  #point = null;
+  #handleFormSubmit = null;
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
+
+  constructor({ point, onFormSubmit }) {
+    super();
+    this.#point = point;
+    this.#handleFormSubmit = onFormSubmit;
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
 
-  getTemplate() {
-    return getEditPointTemplate(this.point);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return getPointEditTemplate(this.#point);
   }
 }

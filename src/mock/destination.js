@@ -1,5 +1,5 @@
 import {CITIES} from '../const.js';
-import {getRandomElement, getRandomImageURL, getRandomSentence} from '../utils.js';
+import {getRandomElement, getRandomImageURL, getRandomSentence} from '../util.js';
 
 const generateDestination = () => {
   const city = getRandomElement(CITIES);

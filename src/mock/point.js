@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import {getRandomElement, getRandomInteger} from '../utils.js';
+import {getRandomElement, getRandomInteger} from '../util.js';
 import {Price, Duration, TYPES} from '../const.js';
 import {generateOffer} from './offer.js';
 import {generateDestination} from './destination.js';
