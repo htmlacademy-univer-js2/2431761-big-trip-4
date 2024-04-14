@@ -1,5 +1,5 @@
 import {createElement} from '../render.js';
-import {formatStringToDate, getPointDuration, formatStringToTime} from '../utils.js';
+import {formatStringToDate, getPointDuration, formatStringToTime} from '../util.js';
 
 const getPointTemplate = (point) => `<li class="trip-events__item">
   <div class="event">
