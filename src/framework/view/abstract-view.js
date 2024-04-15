@@ -41,7 +41,10 @@ export default class AbstractView {
    * @returns {string} Разметка элемента в виде строки
    */
   get template() {
-    throw new Error('Abstract method not implemented: get template');
+    return `
+      <div class="concrete-component">
+      </div>
+    `;
   }
 
   /** Метод для удаления элемента */

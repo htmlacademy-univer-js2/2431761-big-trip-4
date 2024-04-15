@@ -37,7 +37,19 @@ const getPointDuration = (dateFrom, dateTo) => {
   return pointDuration;
 };
 
+const isPointInFuture = (point) => dayjs(point.dateFrom).isAfter(dayjs());
+
+const isPointInPast = (point) => {
+  const currentDate = dayjs();
+  const isStartDateBeforeOrEqual = dayjs(point.dateFrom).isBefore(currentDate) || dayjs(point.dateFrom).isSame(currentDate);
+  const isEndDateAfterOrEqual = dayjs(point.dateTo).isAfter(currentDate) || dayjs(point.dateTo).isSame(currentDate);
+
+  return isStartDateBeforeOrEqual && isEndDateAfterOrEqual;
+};
+
+const isPointInPresent = (point) => dayjs(point.dateTo).isBefore(dayjs());
+
 export {
   capitalize, getRandomElement, getRandomImageURL, getRandomSentence, formatStringToDate, formatStringToTime,
-  getRandomInteger, getPointDuration
+  getRandomInteger, getPointDuration, isPointInPresent, isPointInFuture, isPointInPast
 };

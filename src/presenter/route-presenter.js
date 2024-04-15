@@ -18,7 +18,7 @@ export default class Presenter {
   }
 
   init() {
-    this.#boardPoints = [...this.#pointsModel.points];
+    this.#boardPoints = [...this.#pointsModel.getPoints()];
     this.#renderBoard();
   }
 

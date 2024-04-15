@@ -1,59 +1,46 @@
-const path = require('path'); // Импортируем модуль "path" для работы с путями файлов
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
+const HtmlPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.js', // Точка входа для сборки проекта
-
+  entry: './src/main.js',
   output: {
-    clean: {
-      // сохранение файлов
-      keep: /\ignored\/dir\//
-    },
-    filename: 'bundle.[contenthash].js', // Имя выходного файла сборки
-    path: path.resolve(__dirname, 'build'), // Путь для выходного файла сборки
+    filename: 'bundle.[contenthash].js',
+    path: path.resolve(__dirname, 'build'),
+    clean: true,
   },
-
-  devtool: 'inline-source-map',
-
-  module: {
-    rules: [
-      {
-        test: /\.css$/, // Регулярное выражение для обработки файлов с расширением .css
-        use: ['style-loader', 'css-loader'], // Загрузчики, используемые для обработки CSS-файлов
-      },
-
-      {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: "babel-loader"
-        }
-      },
-    ],
-  },
-
+  devtool: 'source-map',
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
+    new HtmlPlugin({
+      template: 'public/index.html',
     }),
-
-    new CopyWebpackPlugin({
+    new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, `../src/templates`),
-          to: path.resolve(__dirname, `../build/templates`),
-        }
+          from: 'public',
+          globOptions: {
+            ignore: ['**/index.html'],
+          },
+        },
       ],
     }),
   ],
-
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'dist'), // Каталог для статики
-    },
-    open: true, // Автоматически открывать браузер
-  },
-
-  mode: 'development', // Режим сборки
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          },
+        },
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
+      },
+    ]
+  }
 };
