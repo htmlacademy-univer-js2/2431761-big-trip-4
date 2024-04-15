@@ -16,6 +16,13 @@ const Duration = {
   MIN: 59,
 };
 
+const TypeOfFilter = {
+  ALL: 'all',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
+
 const SENTENCES = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
@@ -63,4 +70,4 @@ const TYPES = [
   { title: 'Train', img: 'img/icons/train.png' }
 ];
 
-export {RAND_IMG_URL, MSEC_IN_HOUR, MSEC_IN_DAY, POINT_COUNT, Price, Duration, SENTENCES, CITIES, OFFERS, TYPES};
+export {RAND_IMG_URL, MSEC_IN_HOUR, MSEC_IN_DAY, POINT_COUNT, Price, Duration, TypeOfFilter, SENTENCES, CITIES, OFFERS, TYPES};

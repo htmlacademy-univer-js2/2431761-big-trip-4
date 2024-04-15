@@ -31,11 +31,32 @@ function render(component, container, place = RenderPosition.BEFOREEND) {
     throw new Error('Can render only components');
   }
 
-  if (container === null) {
+  if (!container) {
     throw new Error('Container element doesn\'t exist');
   }
 
-  container.insertAdjacentElement(place, component.element);
+  const elementToInsert = component.element;
+
+  if (!elementToInsert) {
+    throw new Error('Component element is null or undefined');
+  }
+
+  switch (place) {
+    case RenderPosition.BEFOREBEGIN:
+      container.insertAdjacentElement('beforebegin', elementToInsert);
+      break;
+    case RenderPosition.AFTERBEGIN:
+      container.insertAdjacentElement('afterbegin', elementToInsert);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.insertAdjacentElement('beforeend', elementToInsert);
+      break;
+    case RenderPosition.AFTEREND:
+      container.insertAdjacentElement('afterend', elementToInsert);
+      break;
+    default:
+      throw new Error(`Unknown render position: ${place}`);
+  }
 }
 
 /**
