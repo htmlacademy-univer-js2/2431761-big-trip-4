@@ -9,34 +9,37 @@ export default class PointPresenter {
   #changeData = null;
   #changeMode = null;
   #container = null;
-  #point = null;
-  #pointModel = null;
-  #mode = Mode.DEFAULT;
-  #formElement = null;
-  #pointElement = null;
 
-  #previewPointComponent = null;
-  #editingPointComponent = null;
   #pointsModel = null;
 
   #destinations = null;
   #offers = null;
 
+  #point = null;
 
-  constructor (container, onDataChange, onModeChange) {
+  #mode = Mode.DEFAULT;
+
+  #previewPointComponent = null;
+  #editingPointComponent = null;
+
+
+  constructor (container, pointsModel, onDataChange, onModeChange) {
     this.#container = container;
+    this.#pointsModel = pointsModel;
     this.#changeData = onDataChange;
     this.#changeMode = onModeChange;
   }
 
   init(point) {
     this.#point = point;
+    this.#destinations = [...this.#pointsModel.destinations];
+    this.#offers = [...this.#pointsModel.offers];
 
     const prevPreviewPointComponent = this.#previewPointComponent;
     const prevEditingPointComponent = this.#editingPointComponent;
 
-    this.#previewPointComponent = new TripPointView(this.#point); //, onFavouriteClick: this.#handleFavouriteClick});
-    this.#editingPointComponent = new CurrentFormView(this.#point);
+    this.#previewPointComponent = new TripPointView(this.#point, this.#destinations, this.#offers);
+    this.#editingPointComponent = new CurrentFormView(this.#point, this.#destinations, this.#offers);
 
     this.#previewPointComponent.setEditClickHandler(this.#handleEditClick);
     this.#previewPointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
@@ -67,6 +70,7 @@ export default class PointPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#editingPointComponent.reset(this.#point);
       this.#replaceEditingPointToPreviewPoint();
     }
   };
@@ -85,8 +89,9 @@ export default class PointPresenter {
   };
 
   #escKeyDownHandler = (evt) => {
-    if (isEscapeButton) {
+    if (isEscapeButton(evt)) {
       evt.preventDefault();
+      this.#editingPointComponent.reset(this.#point);
       this.#replaceEditingPointToPreviewPoint();
     }
   };
@@ -100,6 +105,7 @@ export default class PointPresenter {
   };
 
   #handlePreviewClick = () => {
+    this.#editingPointComponent.reset(this.#point);
     this.#replaceEditingPointToPreviewPoint();
   };
 
