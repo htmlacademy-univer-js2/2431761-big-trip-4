@@ -1,6 +1,6 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
-const HtmlPlugin = require('html-webpack-plugin');
+const HTMLPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/main.js',
@@ -10,23 +10,21 @@ module.exports = {
     clean: true,
   },
   devtool: 'source-map',
-  plugins: [
-    new HtmlPlugin({
+  plugins:[
+    new HTMLPlugin({
       template: 'public/index.html',
     }),
     new CopyPlugin({
-      patterns: [
-        {
-          from: 'public',
-          globOptions: {
-            ignore: ['**/index.html'],
-          },
+      patterns: [{
+        from: 'public',
+        globOptions: {
+          ignore: ['**/index.html'],
         },
-      ],
+      }],
     }),
   ],
   module: {
-    rules: [
+    rules:[
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
@@ -41,6 +39,6 @@ module.exports = {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader']
       },
-    ]
-  }
+    ],
+  },
 };
