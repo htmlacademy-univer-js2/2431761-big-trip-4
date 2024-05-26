@@ -1,8 +1,8 @@
 import {getTempDate, getRandomArrayElement, getRandomValue} from '../utils.js';
+import { POINT_TYPES } from '../const.js';
 
 const POINTS_COUNT = 5;
 const IMAGE_COUNT = 4;
-const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 const DESTINATIONS = ['Amsterdam', 'Chamonix', 'Washington', 'Chicago', 'New York', 'Moskow', 'Monaco'];
 const OFFERS = ['Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'];
 const DESCRIPTIONS = [
@@ -19,18 +19,18 @@ const ElementsCount = {
 
 const IMAGE_URL = 'https://loremflickr.com/248/152?random=';
 
-const generateOffer = (id, pointType) => ({
+const generateOffer = (id) => ({
   'id': id,
-  'title': `offer for ${pointType}`,
+  'title': getRandomArrayElement(OFFERS),
   'price': getRandomValue()
 });
 
 const generateOffersByType = (pointType) => ({
   type: pointType,
-  offers: Array.from({length: getRandomValue(ElementsCount.MIN, ElementsCount.MAX)}).map((value, index) => generateOffer(index + 1, pointType)),
+  offers: Array.from({length: getRandomValue(ElementsCount.MIN, ElementsCount.MAX)}).map((value, index) => generateOffer(index + 1)),
 });
 
-const getRandomOffer = () => Array.from({length: POINT_TYPES.length}).map((value, index) => generateOffersByType(POINT_TYPES[index]));
+const getRandomOffers = () => Array.from({length: POINT_TYPES.length}).map((value, index) => generateOffersByType(POINT_TYPES[index]));
 
 const generateTown = (id) => ({
   'id': id,
@@ -39,24 +39,23 @@ const generateTown = (id) => ({
   'description': getRandomArrayElement(DESCRIPTIONS).repeat(getRandomValue(ElementsCount.MIN, ElementsCount.MAX))
 });
 
-const getRandomTown = () => Array.from({length: DESTINATIONS.length}).map((value, index) => generateTown(index));
+const getRandomTowns = () => Array.from({length: DESTINATIONS.length}).map((value, index) => generateTown(index));
 
 const generatePoint = () => {
-  const offersByTypePoint = getRandomArrayElement(getRandomOffer());
+  const offersByTypePoint = getRandomArrayElement(getRandomOffers());
   const allOfferIdsByTypePoint = offersByTypePoint.offers.map((offer) => offer.id);
   return {
     'id': crypto.randomUUID(),
     'basePrice': getRandomValue(),
     'dateFrom': getTempDate({flag: false}),
     'dateTo': getTempDate({flag: true}),
-    'destinationId': getRandomArrayElement(getRandomTown()).id,
+    'destinationId': getRandomArrayElement(getRandomTowns()).id,
     'isFavorite': getRandomArrayElement([0, 1]),
     'offerIds': Array.from({length: getRandomValue(0, allOfferIdsByTypePoint.length)}).map(() => allOfferIdsByTypePoint[getRandomValue(0, allOfferIdsByTypePoint.length - 1)]),
     'type': offersByTypePoint.type
   };
 };
 
-const getRandomPoint = () => Array.from({length: POINTS_COUNT}).map(() => generatePoint());
+const getRandomPoints = () => Array.from({length: POINTS_COUNT}).map(() => generatePoint());
 
-export {getRandomOffer, getRandomPoint, getRandomTown,
-  POINTS_COUNT, IMAGE_COUNT, POINT_TYPES, DESTINATIONS, OFFERS, IMAGE_URL};
+export {getRandomOffers, getRandomPoints, getRandomTowns};

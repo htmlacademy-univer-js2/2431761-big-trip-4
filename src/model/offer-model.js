@@ -1,10 +1,10 @@
-import {getRandomOffer} from '../mock/offer-point-town.js';
+import {getRandomOffers} from '../mock/offer-point-town.js';
 
 export default class OfferModel {
-  #offers = getRandomOffer();
+  #offers = getRandomOffers();
 
   constructor() {
-    this.#offers = getRandomOffer();
+    this.#offers = getRandomOffers();
   }
 
   get offers() {
