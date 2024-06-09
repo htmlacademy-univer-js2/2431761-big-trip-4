@@ -1,6 +1,6 @@
-import { filter } from '../utils.js';
+import { Filter } from '../utils.js';
 
-const generateFilter = (points) => Object.entries(filter).map(
+const generateFilter = (points) => Object.entries(Filter).map(
   ([filterName, filterPoints]) => ({
     name: filterName,
     count: filterPoints(points).length > 0,

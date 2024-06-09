@@ -1,28 +1,20 @@
-import { SortType } from '../const.js';
+import { SORTING_COLUMNS } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createSortingTemplate = (currentSortType) => (
+const createSortingItemTemplate = (column) =>
+  `<div class="trip-sort__item  trip-sort__item--${column.type}">
+    <input data-sort-type=${column.type} id="sort-${column.type}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${column.type}" ${!column.active ? 'disabled' : ''} ${column.defaultSelected ? 'checked' : ''}>
+    <label class="trip-sort__btn" for="sort-${column.type}">${column.label}</label>
+  </div>`;
+
+const createSortingTemplate = () =>
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-    ${Object.values(SortType).map((sortType) => {
-    const isDisabled = sortType === SortType.EVENT || sortType === SortType.OFFER ? 'disabled' : '';
-    const isChecked = sortType === currentSortType ? 'checked' : '';
-    return `<div class="trip-sort__item  trip-sort__item--${sortType}">
-        <input id="sort-${sortType}" class="trip-sort__input  visually-hidden" data-sort-type="${sortType}" type="radio" name="trip-sort" value="sort-${sortType}" ${isDisabled} ${isChecked}>
-        <label class="trip-sort__btn" for="sort-${sortType}">${sortType}</label>
-      </div>`;}).join('')}
-  </form>`
-);
+  ${SORTING_COLUMNS.map(createSortingItemTemplate).join('')}
+  </form>`;
 
 export default class SortingView extends AbstractView{
-  #currentSortType = null;
-
-  constructor(currentSortType) {
-    super();
-    this.#currentSortType = currentSortType;
-  }
-
   get template() {
-    return createSortingTemplate(this.#currentSortType);
+    return createSortingTemplate();
   }
 
   setSortTypeChangeHandler = (callback) => {
@@ -34,7 +26,6 @@ export default class SortingView extends AbstractView{
     if (evt.target.tagName !== 'INPUT') {
       return;
     }
-    evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   };
 }
