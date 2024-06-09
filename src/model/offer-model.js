@@ -1,13 +1,23 @@
-import {getRandomOffers} from '../mock/offer-point-town.js';
+import Observable from '../framework/observable.js';
 
-export default class OfferModel {
-  #offers = getRandomOffers();
+export default class OfferModel extends Observable{
+  #pointApiService = null;
+  #offersByType = [];
 
-  constructor() {
-    this.#offers = getRandomOffers();
+  constructor(pointApiService) {
+    super();
+    this.#pointApiService = pointApiService;
   }
 
-  get offers() {
-    return this.#offers;
+  async init() {
+    try {
+      this.#offersByType = await this.#pointApiService.offersByType;
+    } catch(err) {
+      this.#offersByType = [];
+    }
+  }
+
+  get offersByType() {
+    return this.#offersByType;
   }
 }
