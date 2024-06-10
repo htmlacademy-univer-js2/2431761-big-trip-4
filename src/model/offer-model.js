@@ -9,15 +9,15 @@ export default class OfferModel extends Observable{
     this.#pointApiService = pointApiService;
   }
 
+  get offersByType() {
+    return this.#offersByType;
+  }
+
   async init() {
     try {
       this.#offersByType = await this.#pointApiService.offersByType;
     } catch(err) {
       this.#offersByType = [];
     }
-  }
-
-  get offersByType() {
-    return this.#offersByType;
   }
 }
